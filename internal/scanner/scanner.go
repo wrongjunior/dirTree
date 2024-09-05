@@ -1,6 +1,7 @@
 package scanner
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -11,45 +12,48 @@ import (
 	"dirTree/internal/output"
 )
 
-func Run(cfg config.Config) error {
-	currentDir, err := os.Getwd()
+func ScanDirectory(root string, cfg config.Config, progressCallback func(int, int)) (string, error) {
+	fileInfos, err := walkDirectory(root, cfg, progressCallback)
 	if err != nil {
-		return fmt.Errorf("ошибка при получении текущей директории: %w", err)
+		return "", fmt.Errorf("ошибка при обходе директории: %w", err)
 	}
 
-	fileInfos, err := walkDirectory(currentDir, cfg)
-	if err != nil {
-		return fmt.Errorf("ошибка при обходе директории: %w", err)
-	}
-
-	writer, closer, err := output.GetWriter(cfg)
-	if err != nil {
-		return fmt.Errorf("ошибка при создании writer: %w", err)
-	}
-	if closer != nil {
-		defer func() {
-			if err := closer.Close(); err != nil {
-				fmt.Fprintf(os.Stderr, "Ошибка при закрытии writer: %v\n", err)
-			}
-		}()
-	}
+	var buf bytes.Buffer
+	writer := output.GetBufferWriter(&buf)
 
 	if cfg.AbsoluteFlag || cfg.RelativeFlag {
-		if err := output.OutputPathList(writer, fileInfos, cfg, currentDir); err != nil {
-			return err
+		if err := output.OutputPathList(writer, fileInfos, cfg, root); err != nil {
+			return "", err
 		}
 	} else {
-		if err := output.OutputTreeView(writer, fileInfos, cfg, currentDir); err != nil {
-			return err
+		if err := output.OutputTreeView(writer, fileInfos, cfg, root); err != nil {
+			return "", err
 		}
 	}
 
-	return nil
+	return buf.String(), nil
 }
 
-func walkDirectory(root string, cfg config.Config) ([]fileinfo.FileInfo, error) {
+func walkDirectory(root string, cfg config.Config, progressCallback func(int, int)) ([]fileinfo.FileInfo, error) {
 	var fileInfos []fileinfo.FileInfo
+	var totalFiles int
+
+	// First pass: count total files
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return fmt.Errorf("ошибка доступа к пути %q: %w", path, err)
+		}
+		if !shouldIgnore(path, info, cfg) {
+			totalFiles++
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	// Second pass: collect file info and update progress
+	err = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("ошибка доступа к пути %q: %w", path, err)
 		}
@@ -60,6 +64,7 @@ func walkDirectory(root string, cfg config.Config) ([]fileinfo.FileInfo, error) 
 			return nil
 		}
 		fileInfos = append(fileInfos, fileinfo.FileInfo{Path: path, Info: info})
+		progressCallback(len(fileInfos), totalFiles)
 		return nil
 	})
 	return fileInfos, err
