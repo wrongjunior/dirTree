@@ -2,6 +2,7 @@ package output
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -13,20 +14,24 @@ import (
 	"github.com/atotto/clipboard"
 )
 
-func GetWriter(cfg config.Config) (*bufio.Writer, io.Closer, error) {
+func GetWriter(cfg config.Config) (io.Writer, io.Closer, error) {
 	if cfg.ClipboardFlag {
 		var buf strings.Builder
-		return bufio.NewWriter(&buf), &bufferCloser{&buf}, nil
+		return &buf, &bufferCloser{&buf}, nil
 	}
 	if cfg.OutputFile == "" {
-		return bufio.NewWriter(os.Stdout), nil, nil
+		return os.Stdout, nopCloser{}, nil
 	}
 	file, err := os.Create(cfg.OutputFile)
 	if err != nil {
 		return nil, nil, fmt.Errorf("ошибка при создании файла: %w", err)
 	}
-	return bufio.NewWriter(file), file, nil
+	return file, file, nil
 }
+
+type nopCloser struct{}
+
+func (nopCloser) Close() error { return nil }
 
 type bufferCloser struct {
 	buf *strings.Builder
@@ -36,17 +41,17 @@ func (b *bufferCloser) Close() error {
 	return clipboard.WriteAll(b.buf.String())
 }
 
-func OutputPathList(writer *bufio.Writer, fileInfos []fileinfo.FileInfo, cfg config.Config, rootDir string) error {
+func OutputPathList(writer io.Writer, fileInfos []fileinfo.FileInfo, cfg config.Config, rootDir string) error {
 	for _, info := range fileInfos {
 		displayPath := GetDisplayPath(info.Path, rootDir, cfg)
-		if _, err := fmt.Fprintf(writer, "%s\n", displayPath); err != nil {
+		if _, err := fmt.Fprintln(writer, displayPath); err != nil {
 			return err
 		}
 	}
-	return writer.Flush()
+	return nil
 }
 
-func OutputTreeView(writer *bufio.Writer, fileInfos []fileinfo.FileInfo, cfg config.Config, rootDir string) error {
+func OutputTreeView(writer io.Writer, fileInfos []fileinfo.FileInfo, cfg config.Config, rootDir string) error {
 	tree := make(map[string][]fileinfo.FileInfo)
 	var roots []fileinfo.FileInfo
 
@@ -79,10 +84,10 @@ func OutputTreeView(writer *bufio.Writer, fileInfos []fileinfo.FileInfo, cfg con
 		}
 	}
 
-	return writer.Flush()
+	return nil
 }
 
-func printTree(writer *bufio.Writer, item fileinfo.FileInfo, prefix, lastPrefix string, tree map[string][]fileinfo.FileInfo, cfg config.Config, rootDir string) error {
+func printTree(writer io.Writer, item fileinfo.FileInfo, prefix, lastPrefix string, tree map[string][]fileinfo.FileInfo, cfg config.Config, rootDir string) error {
 	displayPath := GetDisplayPath(item.Path, rootDir, cfg)
 
 	if item.Info.IsDir() {
@@ -144,4 +149,9 @@ func FormatFileSize(size int64) string {
 	default:
 		return fmt.Sprintf("%.2f GB", float64(size)/fileinfo.BytesInGB)
 	}
+}
+
+// GetBufferWriter создает новый bufio.Writer для bytes.Buffer
+func GetBufferWriter(buf *bytes.Buffer) *bufio.Writer {
+	return bufio.NewWriter(buf)
 }
