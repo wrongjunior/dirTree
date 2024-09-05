@@ -16,6 +16,8 @@ type Config struct {
 	IgnoreExts       map[string]bool
 	IgnoreConfigFile string
 	ClipboardFlag    bool
+	TUIMode          bool
+	SelectedDirs     []string
 }
 
 func ParseFlags() Config {
@@ -26,6 +28,8 @@ func ParseFlags() Config {
 	ignoreExtsFlag := flag.String("ignore-exts", "", "Список игнорируемых расширений файлов (через запятую)")
 	ignoreConfigFileFlag := flag.String("ignore-config", "", "Файл конфигурации с игнорируемыми директориями и расширениями")
 	clipboardFlag := flag.Bool("clipboard", false, "Выводить в буфер обмена")
+	tuiFlag := flag.Bool("tui", false, "Запустить в интерактивном режиме выбора папок")
+
 	flag.Parse()
 
 	cfg := Config{
@@ -36,6 +40,7 @@ func ParseFlags() Config {
 		IgnoreExts:       convertToExtMap(filterEmpty(strings.Split(*ignoreExtsFlag, ","))),
 		IgnoreConfigFile: *ignoreConfigFileFlag,
 		ClipboardFlag:    *clipboardFlag,
+		TUIMode:          *tuiFlag,
 	}
 
 	if cfg.IgnoreConfigFile != "" {
