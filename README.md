@@ -155,6 +155,12 @@ ext:tmp
 ./dirTree --tui
 ```
 
+
+
+https://github.com/user-attachments/assets/92d0a92e-6107-4da8-a038-dc632e752aa5
+
+
+
 ## Зависимости
 
 Для корректной работы проекта необходимы следующие зависимости:
