@@ -20,32 +20,40 @@
 Пример 1: Вывод относительных путей с игнорированием директории `vendor` и файлов с расширением `.log`.
 
 ```
-project/
-├── main.go (2.5 KB)
-├── output/
-│   ├── output.go (3.1 KB)
-│   └── fileinfo.go (1.8 KB)
+dirTree/
+├── CONTRIBUTING.md (4.34 KB)
+├── LICENSE (1.04 KB)
+├── README.md (5.27 KB)
+├── cmd/
+│   └── main.go (808 B)
+├── conf.txt (42 B)
 └── internal/
+    ├── cli/
+    │   └── cli.go (723 B)
     ├── config/
-    │   └── config.go (1.2 KB)
-    └── fileinfo/
-        └── fileinfo.go (2.0 KB)
+    │   └── config.go (3.03 KB)
+    ├── fileinfo/
+    │   └── fileinfo.go (178 B)
+    ├── output/
+    │   └── output.go (3.76 KB)
+    ├── scanner/
+    │   └── scanner.go (5.04 KB)
+    └── tui/
+        └── tui.go (5.65 KB)
 ```
 
 Пример 2: Вывод абсолютных путей без игнорирования директорий и файлов.
 
 ```
-/home/user/project/
-├── main.go (2.5 KB)
-/home/user/project/output/
-│   ├── output.go (3.1 KB)
-/home/user/project/output/
-│   └── fileinfo.go (1.8 KB)
-/home/user/project/internal/
-    ├── config/
-    │   └── config.go (1.2 KB)
-/home/user/project/internal/fileinfo/
-    └── fileinfo.go (2.0 KB)
+/Users/nameUser/Program/nameUserdirTree
+/Users/nameUser/Program/nameUserdirTree/CONTRIBUTING.md
+/Users/nameUser/Program/nameUserdirTree/LICENSE
+/Users/nameUser/Program/nameUserdirTree/README.md
+/Users/nameUser/Program/nameUserdirTree/cmd
+.
+.
+/Users/nameUser/Program/nameUserdirTree/internal/tui
+/Users/nameUser/Program/nameUserdirTree/internal/tui/tui.go
 ```
 
 ## Основные возможности
