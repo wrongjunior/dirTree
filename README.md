@@ -165,7 +165,7 @@ https://github.com/user-attachments/assets/92d0a92e-6107-4da8-a038-dc632e752aa5
 
 Для корректной работы проекта необходимы следующие зависимости:
 
-- [Go](https://golang.org/doc/install) версии 1.16 или выше.
+- [Go](https://golang.org/doc/install) версии 1.22 или выше.
 - Библиотеки, установленные через `go mod`.
 
 ## Лицензия
