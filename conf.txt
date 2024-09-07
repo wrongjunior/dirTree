@@ -1,0 +1,5 @@
+dir:vendor
+dir:.git
+dir:.idea
+ext:go
+ext:tmp
