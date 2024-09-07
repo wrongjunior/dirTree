@@ -95,6 +95,13 @@ https://github.com/user-attachments/assets/42b938a0-c7e6-4ced-bf9c-0c9c5d03d03d
 ./dirTree --absolute
 ```
 
+
+
+https://github.com/user-attachments/assets/04cdd0a1-ecda-4acc-9a1b-bc1c5a2a22b0
+
+
+
+
 ### Игнорирование директорий и файлов
 
 Для игнорирования определённых директорий используется флаг `--ignore-dirs`:
