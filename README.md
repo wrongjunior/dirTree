@@ -1,5 +1,5 @@
 
-# dirTree Project
+# dirTree
 
 ## Описание
 
@@ -84,11 +84,23 @@ go build -o dirTree main.go
 ./dirTree --relative
 ```
 
+
+https://github.com/user-attachments/assets/42b938a0-c7e6-4ced-bf9c-0c9c5d03d03d
+
+
+
 Пример команды для вывода абсолютных путей:
 
 ```bash
 ./dirTree --absolute
 ```
+
+
+
+https://github.com/user-attachments/assets/04cdd0a1-ecda-4acc-9a1b-bc1c5a2a22b0
+
+
+
 
 ### Игнорирование директорий и файлов
 
@@ -98,20 +110,31 @@ go build -o dirTree main.go
 ./dirTree --ignore-dirs "vendor,.git"
 ```
 
-Игнорирование файлов по расширению осуществляется с помощью флага `--ignore-exts`:
+
+
+https://github.com/user-attachments/assets/62e9034b-81ad-44fd-adfa-ff0fca7d98e2
+
+
+
+
+Игнорирование файлов по расширению осуществляется с помощью флага `--ignore-exts`(вместе с игнорированием директорий):
 
 ```bash
-./dirTree --ignore-exts "log,tmp"
+./dirTree --ignore-exts "go,tmp"
 ```
+
+<img width="377" alt="image" src="https://github.com/user-attachments/assets/f0fc701a-4cae-4a94-bcca-5aa1f0ee239c">
+
 
 ## Конфигурация
 
-Для более гибкой настройки можно использовать файл конфигурации, в котором указываются игнорируемые директории и расширения файлов. Пример файла конфигурации:
+Для более гибкой настройки можно использовать файл конфигурации, в котором указываются игнорируемые директории и расширения файлов. Пример файла конфигурации(c теми же настройками что выше, по отдельности):
 
 ```
 dir:vendor
 dir:.git
-ext:log
+dir:.idea
+ext:go
 ext:tmp
 ```
 
@@ -120,6 +143,9 @@ ext:tmp
 ```bash
 ./dirTree --ignore-config ./config.txt
 ```
+
+<img width="377" alt="image" src="https://github.com/user-attachments/assets/8fdf7426-294d-4650-9260-69a18a1cc2d8">
+
 
 ## Интерактивный режим
 
