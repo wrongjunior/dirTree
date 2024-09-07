@@ -1,5 +1,5 @@
 
-# dirTree Project
+# dirTree
 
 ## Описание
 
@@ -83,6 +83,11 @@ go build -o dirTree main.go
 ```bash
 ./dirTree --relative
 ```
+
+
+https://github.com/user-attachments/assets/42b938a0-c7e6-4ced-bf9c-0c9c5d03d03d
+
+
 
 Пример команды для вывода абсолютных путей:
 
