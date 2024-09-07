@@ -110,6 +110,13 @@ https://github.com/user-attachments/assets/04cdd0a1-ecda-4acc-9a1b-bc1c5a2a22b0
 ./dirTree --ignore-dirs "vendor,.git"
 ```
 
+
+
+https://github.com/user-attachments/assets/62e9034b-81ad-44fd-adfa-ff0fca7d98e2
+
+
+
+
 Игнорирование файлов по расширению осуществляется с помощью флага `--ignore-exts`:
 
 ```bash
