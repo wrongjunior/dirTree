@@ -117,11 +117,14 @@ https://github.com/user-attachments/assets/62e9034b-81ad-44fd-adfa-ff0fca7d98e2
 
 
 
-Игнорирование файлов по расширению осуществляется с помощью флага `--ignore-exts`:
+Игнорирование файлов по расширению осуществляется с помощью флага `--ignore-exts`(вместе с игнорированием директорий):
 
 ```bash
-./dirTree --ignore-exts "log,tmp"
+./dirTree --ignore-exts "go,tmp"
 ```
+
+<img width="377" alt="image" src="https://github.com/user-attachments/assets/f0fc701a-4cae-4a94-bcca-5aa1f0ee239c">
+
 
 ## Конфигурация
 
